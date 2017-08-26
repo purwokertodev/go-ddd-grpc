@@ -1,0 +1,14 @@
+{
+  "name": "nodeclient",
+  "version": "1.0.0",
+  "description": "Client for Golang grpc server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wuriyanto",
+  "license": "ISC",
+  "dependencies": {
+    "grpc": "^1.4.1"
+  }
+}
