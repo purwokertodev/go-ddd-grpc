@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
-  "net"
+	"net"
 )
 
 type EmployeeServer struct {
@@ -28,7 +28,7 @@ func (s *EmployeeServer) Serve(port uint) error {
 
 	address := fmt.Sprintf(":%d", port)
 
-  log.Println("your server is running")
+	log.Println("your server is running")
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {
@@ -90,5 +90,5 @@ func (s *EmployeeServer) GetEmployee(key *pb.EmployeeFilter, stream pb.EmployeeS
 		return err
 	}
 
-  return nil
+	return nil
 }

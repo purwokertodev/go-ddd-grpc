@@ -1,11 +1,11 @@
-# GRPC CRUD EXAMPLE USING POSTGRESS
+GRPC CRUD EXAMPLE USING POSTGRESS
 
-# Run Server
+- Run Server
 ```shell
 DB_USER=postgres DB_PASSWORD=12345 DB_HOST=localhost DB_NAME=gp go run main.go
 ```
 
-# Run Client
+- Run Client
 
 ```shell
 SERVER_HOST=localhost:8080 go run main.go
