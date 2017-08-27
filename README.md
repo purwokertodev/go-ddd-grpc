@@ -23,13 +23,26 @@ GRPC CRUD EXAMPLE USING POSTGRESS
 
 	```
 # App
-- Run Server
-```shell
-DB_USER=postgres DB_PASSWORD=12345 DB_HOST=localhost DB_NAME=gp go run main.go
-```
+  - Run Server
+    ```shell
+    DB_USER=postgres DB_PASSWORD=12345 DB_HOST=localhost DB_NAME=gp go run main.go
+    ```
 
-- Run Client
+  - Run Go Client
+    Go to client folder
+    ```shell
+    cd /client
+    ```
 
-```shell
-SERVER_HOST=localhost:8080 go run main.go
-```
+    ```shell
+    SERVER_HOST=localhost:8080 go run main.go
+    ```
+  - Run NodeJs Client
+    Go to client folder
+    ```shell
+    cd /client/nodeclient
+    ```
+
+    ```shell
+    node index.js
+    ```
