@@ -19,7 +19,7 @@ func main() {
 	dbHost, ok := os.LookupEnv("DB_HOST")
 
 	if !ok {
-		fmt.Println("ORDER_DB_HOST not set in environment variable or test script")
+		fmt.Println("DB_HOST not set in environment variable or test script")
 	}
 
 	dbName, ok := os.LookupEnv("DB_NAME")
@@ -31,13 +31,13 @@ func main() {
 	dbUser, ok := os.LookupEnv("DB_USER")
 
 	if !ok {
-		fmt.Println("ORDER_DB_USER not set in environmet variable or test script")
+		fmt.Println("DB_USER not set in environmet variable or test script")
 	}
 
 	dbPassword, ok := os.LookupEnv("DB_PASSWORD")
 
 	if !ok {
-		fmt.Println("ORDER_DB_USER not set in environmet variable or test script")
+		fmt.Println("DB_USER not set in environmet variable or test script")
 	}
 
 	repoEmployee, err := repo.NewEmployeeRepoPostgres(dbHost, dbUser, dbPassword, dbName)
