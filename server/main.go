@@ -8,6 +8,12 @@ import (
 	"os"
 )
 
+const (
+	SERVER_CERT = "../cert/server.crt"
+	SERVER_KEY  = "../cert/server.key"
+	CA          = "../cert/server.crt"
+)
+
 func main() {
 
 	dbHost, ok := os.LookupEnv("DB_HOST")
@@ -41,8 +47,8 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	employeeServer := serv.NewEmployeeServer(grpcServer, repoEmployee)
-	err = employeeServer.Serve(8080)
+	employeeServer := serv.NewEmployeeServer(grpcServer, repoEmployee, SERVER_CERT, SERVER_KEY, CA)
+	err = employeeServer.ServeMutualTLS(8080)
 	if err != nil {
 		fmt.Sprintf("error create employee grpc server : %s", err)
 	}

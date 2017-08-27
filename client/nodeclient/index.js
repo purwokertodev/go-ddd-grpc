@@ -21,6 +21,10 @@ function getEmployee(id){
   call.on('data', (em) => {
     console.log(em)
   });
+
+  call.on('error', (err) => {
+    console.log(err)
+  });
 }
 
 getEmployee('9e10c3fc-f3dd-4dca-b7e9-8f1f1b038dcc');

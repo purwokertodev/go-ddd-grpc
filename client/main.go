@@ -2,13 +2,25 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 
 	pb "github.com/wuriyanto48/go-ddd-grpc/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+)
+
+const (
+	SERVER_CERT = "../cert/server.crt"
+	SERVER_KEY  = "../cert/server.key"
+	CA          = "../cert/server.crt"
+	SERVER_NAME = "localhost"
 )
 
 func main() {
@@ -19,29 +31,98 @@ func main() {
 		fmt.Println("SERVER HOST not set in environment variable or test script")
 	}
 
-	// dial without tls or something
-	conn, err := grpc.Dial(serverHost, grpc.WithInsecure())
+	client, err := clientWithMutualTLS(serverHost)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
-	defer conn.Close()
-
-	client := pb.NewEmployeeServiceClient(conn)
 	//find
-	id := "9e10c3fc-f3dd-4dca-b7e9-8f1f1b038dcc"
+	id := "1bd06dd0-fa00-40a8-8bfa-ddef1342aec5"
 
-	GetEmployee(client, id)
+	GetEmployee(*client, id)
 
-	// var salary float64 = 15000000.0
+	//create
+
+	// var salary float64 = 87000000.0
 	// em := &pb.EmployeeRequest{
-	// 	Name:    "Bimo",
-	// 	Age:     30,
-	// 	Address: "Jakarta Barat",
+	// 	Name:    "Andree",
+	// 	Age:     35,
+	// 	Address: "Bogor",
 	// 	Salary:  salary,
 	// }
 	//
-	// CreateEmployee(client, em)
+	// CreateEmployee(*client, em)
+}
+
+func clientWithInsecure(serverHost string) (*pb.EmployeeServiceClient, error) {
+	conn, err := grpc.Dial(serverHost, grpc.WithInsecure())
+	if err != nil {
+		return nil, err
+	}
+
+	//defer conn.Close()
+
+	client := pb.NewEmployeeServiceClient(conn)
+
+	return &client, nil
+}
+
+func clientWithTLS(serverHost string) (*pb.EmployeeServiceClient, error) {
+
+	//create client TLS
+	creds, err := credentials.NewClientTLSFromFile(SERVER_CERT, "")
+	if err != nil {
+		return nil, err
+	}
+
+	conn, err := grpc.Dial(serverHost, grpc.WithTransportCredentials(creds))
+	if err != nil {
+		return nil, err
+	}
+
+	//defer conn.Close()
+
+	client := pb.NewEmployeeServiceClient(conn)
+
+	return &client, nil
+}
+
+func clientWithMutualTLS(serverHost string) (*pb.EmployeeServiceClient, error) {
+
+	//get from disk
+	certificate, err := tls.LoadX509KeyPair(SERVER_CERT, SERVER_KEY)
+	if err != nil {
+		return nil, fmt.Errorf("cannot load server key pair : %s", err)
+	}
+
+	//create certificate pool from CA
+	certPool := x509.NewCertPool()
+	ca, err := ioutil.ReadFile(CA)
+	if err != nil {
+		return nil, fmt.Errorf("cannot load certificate authority : %s", err)
+	}
+
+	//append the client certificate from the CA
+	if ok := certPool.AppendCertsFromPEM(ca); !ok {
+		return nil, errors.New("failed append client cert")
+	}
+
+	creds := credentials.NewTLS(&tls.Config{
+		ServerName:   SERVER_NAME,
+		Certificates: []tls.Certificate{certificate},
+		RootCAs:      certPool,
+	})
+
+	conn, err := grpc.Dial(serverHost, grpc.WithTransportCredentials(creds))
+	if err != nil {
+		return nil, err
+	}
+
+	//defer conn.Close()
+
+	client := pb.NewEmployeeServiceClient(conn)
+
+	return &client, nil
 }
 
 func CreateEmployee(client pb.EmployeeServiceClient, e *pb.EmployeeRequest) {
