@@ -53,28 +53,37 @@ func NewEmployeeRepoPostgresDB(db *sql.DB) (*EmployeeRepositoryPostgres, error) 
 
 func (repo *EmployeeRepositoryPostgres) Load(id uuid.UUID) <-chan EmployeeResponse {
 	result := make(chan EmployeeResponse)
+
 	go func() {
+
 		defer close(result)
+
 		employee := new(model.Employee)
 		query := "SELECT * FROM EMPLOYEE WHERE id=$1"
 		prep, err := repo.Db.Prepare(query)
+
 		defer prep.Close()
+
 		if err != nil {
 			result <- EmployeeResponse{Error: err}
 			return
 		}
+
 		err = prep.QueryRow(id).Scan(&employee.Id, &employee.Name, &employee.Age, &employee.Address, &employee.Salary, &employee.CreatedAt, &employee.UpdatedAt, &employee.Version)
 		if err != nil {
 			result <- EmployeeResponse{Error: err}
 			return
 		}
+
 		result <- EmployeeResponse{Error: nil, Employee: employee}
+
 	}()
 	return result
 }
 
 func (repo *EmployeeRepositoryPostgres) Save(e *model.Employee) <-chan error {
 	result := make(chan error)
+
 	go func() {
 
 		defer close(result)

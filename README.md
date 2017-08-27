@@ -12,7 +12,7 @@ GRPC CRUD EXAMPLE USING POSTGRESS
 	openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
 
 	```
- - server.csr: a certificate signing request to acces the CA(Certificate Authority)
+ - server.csr: a certificate signing request to access the CA(Certificate Authority)
 	```shell
 	openssl req -new -sha256 -key server.key -out server.csr
 
@@ -37,7 +37,7 @@ GRPC CRUD EXAMPLE USING POSTGRESS
     ```shell
     SERVER_HOST=localhost:8080 go run main.go
     ```
-  - Run NodeJs Client, 
+  - Run NodeJs Client,
     go to client folder
     ```shell
     cd /client/nodeclient

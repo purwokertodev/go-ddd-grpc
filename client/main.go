@@ -36,10 +36,14 @@ func main() {
 		fmt.Println(err)
 	}
 
-	//find
-	id := "1bd06dd0-fa00-40a8-8bfa-ddef1342aec5"
+	//find all
 
-	GetEmployee(*client, id)
+	GetEmployeeAll(*client)
+
+	//find
+	// id := "1bd06dd0-fa00-40a8-8bfa-ddef1342aec5"
+	//
+	// GetEmployee(*client, id)
 
 	//create
 
@@ -157,4 +161,27 @@ func GetEmployee(client pb.EmployeeServiceClient, id string) {
 	}
 
 	fmt.Println(employee)
+}
+
+func GetEmployeeAll(client pb.EmployeeServiceClient) {
+	filter := &pb.EmployeeFilter{}
+	resStream, err := client.GetAll(context.Background(), filter)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	result, err := resStream.Recv()
+
+	if err == io.EOF {
+		log.Fatal(err)
+	}
+
+	if err != nil {
+		log.Fatalf("%v.GetEmployee(_) = _, %v", client, err)
+	}
+
+	for _, e := range result.Employees {
+		fmt.Println(e)
+	}
 }

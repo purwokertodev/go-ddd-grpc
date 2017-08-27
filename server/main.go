@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	eq "github.com/wuriyanto48/go-ddd-grpc/server/query"
 	repo "github.com/wuriyanto48/go-ddd-grpc/server/repository"
 	serv "github.com/wuriyanto48/go-ddd-grpc/server/servers"
 	"google.golang.org/grpc"
@@ -46,8 +47,14 @@ func main() {
 		fmt.Println("error during create repository employee")
 	}
 
+	queryEmployee, err := eq.NewQueryEmployeePostgres(dbHost, dbUser, dbPassword, dbName)
+
+	if err != nil {
+		fmt.Println("error during create query employee")
+	}
+
 	grpcServer := grpc.NewServer()
-	employeeServer := serv.NewEmployeeServer(grpcServer, repoEmployee, SERVER_CERT, SERVER_KEY, CA)
+	employeeServer := serv.NewEmployeeServer(grpcServer, repoEmployee, queryEmployee, SERVER_CERT, SERVER_KEY, CA)
 	err = employeeServer.ServeMutualTLS(8080)
 	if err != nil {
 		fmt.Sprintf("error create employee grpc server : %s", err)

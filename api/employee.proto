@@ -6,6 +6,8 @@ service EmployeeService {
   rpc CreateEmployee (EmployeeRequest) returns (EmployeeResponse) {}
 
   rpc GetEmployee (EmployeeFilter) returns (stream EmployeeRequest) {}
+
+  rpc GetAll(EmployeeFilter) returns (stream Employees) {}
 }
 
 message EmployeeRequest {
@@ -26,4 +28,8 @@ message EmployeeResponse {
 
 message EmployeeFilter {
   string key = 1;
+}
+
+message Employees {
+  repeated EmployeeRequest employees = 1;
 }

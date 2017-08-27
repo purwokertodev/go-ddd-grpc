@@ -8,6 +8,7 @@ import (
 	"github.com/satori/go.uuid"
 	pb "github.com/wuriyanto48/go-ddd-grpc/api"
 	model "github.com/wuriyanto48/go-ddd-grpc/server/model"
+	eq "github.com/wuriyanto48/go-ddd-grpc/server/query"
 	repo "github.com/wuriyanto48/go-ddd-grpc/server/repository"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -20,15 +21,17 @@ import (
 type EmployeeServer struct {
 	server               *grpc.Server
 	employeeRepo         repo.EmployeeRepository
+	employeeQuery        eq.EmployeeQuery
 	serverCert           string
 	serverKey            string
 	certificateAuthority string
 }
 
-func NewEmployeeServer(server *grpc.Server, repo repo.EmployeeRepository, serverCert, serverKey, ca string) *EmployeeServer {
+func NewEmployeeServer(server *grpc.Server, repo repo.EmployeeRepository, q eq.EmployeeQuery, serverCert, serverKey, ca string) *EmployeeServer {
 	return &EmployeeServer{
 		server:               server,
 		employeeRepo:         repo,
+		employeeQuery:        q,
 		serverCert:           serverCert,
 		serverKey:            serverKey,
 		certificateAuthority: ca,
@@ -176,6 +179,47 @@ func (s *EmployeeServer) GetEmployee(key *pb.EmployeeFilter, stream pb.EmployeeS
 	}
 
 	if err = stream.Send(res); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *EmployeeServer) GetAll(key *pb.EmployeeFilter, stream pb.EmployeeService_GetAllServer) error {
+
+	emRes := <-s.employeeQuery.GetAll()
+
+	if emRes.Error != nil {
+		return emRes.Error
+	}
+
+	employees, ok := emRes.Result.([]*model.Employee)
+
+	if !ok {
+		return errors.New("Not type of employees")
+	}
+
+	var employeeRequests []*pb.EmployeeRequest
+
+	for _, em := range employees {
+		res := &pb.EmployeeRequest{
+			Id:        em.Id.String(),
+			Name:      em.Name,
+			Age:       int32(em.Age),
+			Address:   em.Address,
+			Salary:    em.Salary,
+			CreatedAt: em.CreatedAt.String(),
+			UpdatedAt: em.UpdatedAt.String(),
+			Version:   int32(em.Version),
+		}
+
+		employeeRequests = append(employeeRequests, res)
+
+	}
+
+	finalResults := pb.Employees{Employees: employeeRequests}
+
+	if err := stream.Send(&finalResults); err != nil {
 		return err
 	}
 
