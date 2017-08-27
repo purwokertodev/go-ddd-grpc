@@ -61,7 +61,7 @@ func (s *EmployeeServer) ServeMutualTLS(port uint) error {
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	creds := credentials.NewTLS(&tls.Config{
@@ -77,7 +77,7 @@ func (s *EmployeeServer) ServeMutualTLS(port uint) error {
 	err = s.server.Serve(l)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return nil
@@ -100,13 +100,13 @@ func (s *EmployeeServer) ServeTLS(port uint) error {
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	err = s.server.Serve(l)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return nil
@@ -121,7 +121,7 @@ func (s *EmployeeServer) Serve(port uint) error {
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	s.server = grpc.NewServer()
@@ -131,7 +131,7 @@ func (s *EmployeeServer) Serve(port uint) error {
 	err = s.server.Serve(l)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return nil
@@ -154,7 +154,7 @@ func (s *EmployeeServer) GetEmployee(key *pb.EmployeeFilter, stream pb.EmployeeS
 	id, err := uuid.FromString(key.Key)
 
 	if err != nil {
-		fmt.Println("uuid error")
+		return err
 	}
 
 	emRes := <-s.employeeRepo.Load(id)

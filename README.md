@@ -28,8 +28,8 @@ GRPC CRUD EXAMPLE USING POSTGRESS
     DB_USER=postgres DB_PASSWORD=12345 DB_HOST=localhost DB_NAME=gp go run main.go
     ```
 
-  - Run Go Client
-    Go to client folder
+  - Run Go Client,
+    go to client folder
     ```shell
     cd /client
     ```
@@ -37,8 +37,8 @@ GRPC CRUD EXAMPLE USING POSTGRESS
     ```shell
     SERVER_HOST=localhost:8080 go run main.go
     ```
-  - Run NodeJs Client
-    Go to client folder
+  - Run NodeJs Client, 
+    go to client folder
     ```shell
     cd /client/nodeclient
     ```
