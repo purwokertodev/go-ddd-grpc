@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	SERVER_CERT = "../cert/server.crt"
-	SERVER_KEY  = "../cert/server.key"
-	CA          = "../cert/server.crt"
+	SERVER_CERT = "./cert/server.crt"
+	SERVER_KEY  = "./cert/server.key"
+	CA          = "./cert/server.crt"
 )
 
 func main() {
