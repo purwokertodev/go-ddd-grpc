@@ -52,6 +52,7 @@ GRPC CRUD EXAMPLE USING POSTGRESS
       ```shell
       make build
       ```
+      
     - Run Container
       ```shell
       docker run --rm -p 8080:8080 -e DB_USER=db_user -e DB_PASSWORD=db_password -e DB_HOST=db_host -e DB_NAME=db_name wuriyanto/go-ddd-grpc
