@@ -23,6 +23,16 @@ GRPC CRUD EXAMPLE USING POSTGRESS
 
 	```
 # App
+  - Run Unit Test
+    ```shell
+    make test
+    ```
+
+  - Format Go Code
+    ```shell
+    make format
+    ```
+
   - Run Server
     ```shell
     DB_USER=postgres DB_PASSWORD=12345 DB_HOST=localhost DB_NAME=gp go run main.go
