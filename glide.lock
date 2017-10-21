@@ -1,5 +1,5 @@
-hash: a68f617cf08445874cb7f04f0211d1a0664803df10c48d6870f3438c417437d9
-updated: 2017-08-26T22:54:36.401793048+07:00
+hash: 461fb7c37835c55dc8894e515f73d84a57b4219df58f5edd8005ce060fce70ca
+updated: 2017-10-21T14:20:01.469386471+07:00
 imports:
 - name: github.com/golang/protobuf
   version: 5a0f697c9ed9d68fef0116532c6e05cfeae00e55
@@ -12,6 +12,10 @@ imports:
   - oid
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
+- name: github.com/stretchr/testify
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
+  subpackages:
+  - assert
 - name: golang.org/x/net
   version: 1a68b1313cf4ad7778376e82641197b60c02f65c
   subpackages:
@@ -36,7 +40,9 @@ imports:
 - name: google.golang.org/grpc
   version: b3ddf786825de56a4178401b7e174ee332173b66
   subpackages:
+  - balancer
   - codes
+  - connectivity
   - credentials
   - grpclb/grpc_lb_v1
   - grpclog
@@ -49,4 +55,14 @@ imports:
   - status
   - tap
   - transport
-testImports: []
+- name: gopkg.in/DATA-DOG/go-sqlmock.v1
+  version: d76b18b42f285b792bf985118980ce9eacea9d10
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
